@@ -9,7 +9,7 @@ module MobileFu
       sources.each do |source|
         mobilized_sources << source
 
-        device_names = is_mobile_device? ? ['mobile', mobile_device.downcase] : []
+        device_names = respond_to?(:is_mobile_device?) && is_mobile_device? ? ['mobile', mobile_device.downcase] : []
 
         device_names.compact.each do |device_name|
           possible_source = "#{source.to_s.gsub '.css', ''}_#{device_name}.css"
