@@ -44,6 +44,22 @@ module ActionController
         helper_method :is_device?
         helper_method :mobile_device
       end
+      
+      # Add this to your controllers to prevent the mobile format from being set for specific actions
+      #   class AwesomeController < ApplicationController
+      #     has_no_mobile_fu_for :index
+      #     
+      #     def index
+      #       # Mobile format will not be set, even if user is on a mobile device
+      #     end
+      #     
+      #     def show
+      #       # Mobile format will be set as normal here if user is on a mobile device
+      #     end
+      #   end
+      def has_no_mobile_fu_for(*actions)
+        @mobile_exempt_actions = actions
+      end
     end
 
     module InstanceMethods
@@ -64,7 +80,7 @@ module ActionController
       # the user has opted to use either the 'Standard' view or 'Mobile' view.
 
       def set_mobile_format
-        if is_mobile_device? && !request.xhr?
+        if !mobile_exempt? && is_mobile_device? && !request.xhr?
           request.format = session[:mobile_view] == false ? :html : :mobile
           session[:mobile_view] = true if session[:mobile_view].nil?
         end
@@ -94,6 +110,13 @@ module ActionController
 
       def is_device?(type)
         request.user_agent.to_s.downcase.include? type.to_s.downcase
+      end
+      
+      # Returns true if current action isn't supposed to use mobile format
+      # See #has_no_mobile_fu_for
+      
+      def mobile_exempt?
+        self.class.instance_variable_get("@mobile_exempt_actions").try(:include?, params[:action].to_sym)
       end
     end
   end
