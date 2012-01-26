@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "mobile-fu"
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.files         = ["CHANGELOG", "MIT-LICENSE", "README.md", "lib/mobile-fu.rb", "lib/mobile-fu/helper.rb", "lib/mobile-fu/version.rb" ]
+  s.test_files    = [ 'spec/mobilized_styles_spec.rb', 'spec/spec_helper.rb' ] 
+  s.executables   = [ ]
+  s.require_path  = 'lib'
 
   s.add_dependency 'rails'
   s.add_dependency 'rack-mobile-detect'
