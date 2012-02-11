@@ -25,9 +25,9 @@ set as :mobile format.  It is up to you to determine how you want to handle
 these requests.  It is also up to you to create the .mobile.erb versions of
 your views that are to be requested.
 
-Then add the line below to config/initializers/mime_types.rb
-
-    Mime::Type.register_alias "text/html", :mobile
+Mobile Fu automatically adds a new `:mobile` to `text/html` mime type alias for 
+Rails apps. If you already have a custom `:mobile` alias registered in 
+`config/initializers/mime_types.rb`, you can remove that.
 
 I recommend that you setup a before_filter that will redirect to a specific page
 depending on whether or not it is a mobile request.  How can you check this?
