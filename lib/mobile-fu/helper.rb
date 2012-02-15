@@ -26,16 +26,16 @@ module MobileFu
       
       sources.each do |source|
         mobilized_sources << source
-
+        
         device_names.compact.each do |device_name|
           # support ERB and/or SCSS extensions (e.g., mobile.css.erb, mobile.css.scss.erb)
           possible_source = source.to_s.sub(/\.css.*$/, '') + "_#{device_name}"
-
+          
           mobilized_files = Dir.glob(File.join(stylesheets_dir, "#{possible_source}.css*")).map { |f| f.sub(stylesheets_dir, '') }
           mobilized_sources += mobilized_files.map { |f| f.sub(/\.css.*/, '') }
         end
       end
-
+      
       stylesheet_link_tag_without_mobilization *mobilized_sources
     end
   end

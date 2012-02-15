@@ -25,11 +25,16 @@ module MobileFu
     end
 
     Mime::Type.register_alias "text/html", :mobile
+    Mime::Type.register_alias "text/html", :tablet
   end
 end
 
 module ActionController
   module MobileFu
+    # These are various strings that can be found in tablet devices.  Please feel free
+    # to add on to this list.
+    TABLET_USER_AGENTS =  'ipad|android 3.0|xoom|sch-i800|playbook|tablet|kindle|honeycomb'
+
     def self.included(base)
       base.extend ClassMethods
     end
@@ -55,11 +60,13 @@ module ActionController
         before_filter :set_request_format if set_request_format
 
         helper_method :is_mobile_device?
+        helper_method :is_tablet_device?
         helper_method :in_mobile_view?
+        helper_method :in_tablet_view?
         helper_method :is_device?
         helper_method :mobile_device
       end
-      
+
       # Add this to your controllers to prevent the mobile format from being set for specific actions
       #   class AwesomeController < ApplicationController
       #     has_no_mobile_fu_for :index
@@ -91,13 +98,25 @@ module ActionController
         end
       end
 
+      # Forces the request format to be :tablet
+      def force_tablet_format
+        unless request.xhr?
+          request.format = :tablet
+          session[:tablet_view] = true if session[:tablet_view].nil?
+        end
+      end
+
       # Determines the request format based on whether the device is mobile or if
-      # the user has opted to use either the 'Standard' view or 'Mobile' view.
+      # the user has opted to use either the 'Standard' view or 'Mobile' view or
+      # 'Tablet' view.
 
       def set_mobile_format
         if !mobile_exempt? && is_mobile_device? && !request.xhr?
           request.format = session[:mobile_view] == false ? :html : :mobile
           session[:mobile_view] = true if session[:mobile_view].nil?
+        elsif !mobile_exempt? && is_tablet_device? && !request.xhr?
+          request.format = session[:tablet_view] == false ? :html : :tablet
+          session[:tablet_view] = true if session[:tablet_view].nil?
         end
       end
 
@@ -109,11 +128,23 @@ module ActionController
         request.format.to_sym == :mobile
       end
 
+      # Returns either true or false depending on whether or not the format of the
+      # request is either :tablet or not.
+
+      def in_tablet_view?
+        return false unless request.format
+        request.format.to_sym == :tablet
+      end
+
       # Returns either true or false depending on whether or not the user agent of
       # the device making the request is matched to a device in our regex.
 
       def is_mobile_device?
         !!mobile_device
+      end
+
+      def is_tablet_device?
+        request.user_agent.to_s.downcase =~ Regexp.new(ActionController::MobileFu::TABLET_USER_AGENTS)
       end
 
       def mobile_device
@@ -126,10 +157,10 @@ module ActionController
       def is_device?(type)
         request.user_agent.to_s.downcase.include? type.to_s.downcase
       end
-      
+
       # Returns true if current action isn't supposed to use mobile format
       # See #has_no_mobile_fu_for
-      
+
       def mobile_exempt?
         self.class.instance_variable_get("@mobile_exempt_actions").try(:include?, params[:action].to_sym)
       end
