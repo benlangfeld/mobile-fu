@@ -14,7 +14,7 @@ Simply add `gem 'mobile-fu'` to your Gemfile and run bundle install.
 Usage
 -----
 
-Add this this one line to the controller.
+Add this this one line to the controller (you may need to restart your server afterwards).
 
     class ApplicationController < ActionController::Base
       has_mobile_fu
