@@ -111,10 +111,10 @@ module ActionController
       # 'Tablet' view.
 
       def set_mobile_format
-        if !mobile_exempt? && is_mobile_device? && !request.xhr?
+        if !mobile_exempt? && is_mobile_device?
           request.format = session[:mobile_view] == false ? :html : :mobile
           session[:mobile_view] = true if session[:mobile_view].nil?
-        elsif !mobile_exempt? && is_tablet_device? && !request.xhr?
+        elsif !mobile_exempt? && is_tablet_device?
           request.format = session[:tablet_view] == false ? :html : :tablet
           session[:tablet_view] = true if session[:tablet_view].nil?
         end
