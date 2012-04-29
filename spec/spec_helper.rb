@@ -1,1 +1,1 @@
-require 'mobile-fu'
+require 'mobile-and-tablet-fu'

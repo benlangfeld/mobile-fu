@@ -1,5 +1,5 @@
-Mobile Fu
-=========
+Mobile and Tablet Fu
+====================
 
 Want to automatically detect mobile devices that access your Rails application?
 Mobile Fu allows you to do just that.  People can access your site from a Palm,
@@ -9,7 +9,7 @@ of the request from :html to :mobile or :tablet.
 Installation
 ------------
 
-Simply add `gem 'mobile-fu'` to your Gemfile and run bundle install.
+Simply add `gem 'mobile-and-tablet-fu'` to your Gemfile and run bundle install.
 
 Usage
 -----
@@ -17,7 +17,7 @@ Usage
 Add this this one line to the controller.
 
     class ApplicationController < ActionController::Base
-      has_mobile_fu
+      has_mobile_and_tablet_fu
     end
 
 Once this is in place, any request that comes from a mobile device will be be
@@ -25,8 +25,8 @@ set as :mobile format.  It is up to you to determine how you want to handle
 these requests.  It is also up to you to create the .mobile.erb versions of
 your views that are to be requested.
 
-Mobile Fu automatically adds a new `:mobile` and `:tablet` to `text/html` mime type 
-alias for Rails apps. If you already have a custom `:mobile` alias registered in 
+Mobile Fu automatically adds a new `:mobile` and `:tablet` to `text/html` mime type
+alias for Rails apps. If you already have a custom `:mobile` alias registered in
 `config/initializers/mime_types.rb`, you can remove that.
 
 I recommend that you setup a before_filter that will redirect to a specific page
@@ -89,14 +89,14 @@ If you want to force the mobile interface for testing, you can either use a
 mobile device emulator, or you can call `force_mobile_format` in a before filter.
 
     class ApplicationController < ActionController::Base
-      has_mobile_fu
+      has_mobile_and_tablet_fu
       before_filter :force_mobile_format
     end
 
 You can also force the tablet view by calling `force_tablet_format` instead
 
     class ApplicationController < ActionController::Base
-      has_mobile_fu
+      has_mobile_and_tablet_fu
       before_filter :force_tablet_format
     end
 

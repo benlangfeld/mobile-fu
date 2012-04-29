@@ -1,24 +1,24 @@
 require 'rails'
 require 'rack/mobile-detect'
 
-module MobileFu
-  autoload :Helper, 'mobile-fu/helper'
+module MobileAndTabletFu
+  autoload :Helper, 'mobile-and-tablet-fu/helper'
 
   class Railtie < Rails::Railtie
-    initializer "mobile-fu.configure" do |app|
+    initializer "mobile-and-tablet-fu.configure" do |app|
       app.config.middleware.use Rack::MobileDetect
     end
 
     if Rails::VERSION::MAJOR >= 3
-      initializer "mobile-fu.action_controller" do |app|
+      initializer "mobile-and-tablet-fu.action_controller" do |app|
         ActiveSupport.on_load :action_controller do
-          include ActionController::MobileFu
+          include ActionController::MobileAndTabletFu
         end
       end
 
-      initializer "mobile-fu.action_view" do |app|
+      initializer "mobile-and-tablet-fu.action_view" do |app|
         ActiveSupport.on_load :action_view do
-          include MobileFu::Helper
+          include MobileAndTabletFu::Helper
           alias_method_chain :stylesheet_link_tag, :mobilization
         end
       end
@@ -30,7 +30,7 @@ module MobileFu
 end
 
 module ActionController
-  module MobileFu
+  module MobileAndTabletFu
     # These are various strings that can be found in tablet devices.  Please feel free
     # to add on to this list.
     TABLET_USER_AGENTS =  'ipad|android 3.0|xoom|sch-i800|playbook|tablet|kindle|honeycomb'
@@ -41,21 +41,21 @@ module ActionController
 
     module ClassMethods
 
-      # Add this to one of your controllers to use MobileFu.
+      # Add this to one of your controllers to use MobileAndTabletFu.
       #
       #    class ApplicationController < ActionController::Base
-      #      has_mobile_fu
+      #      has_mobile_and_tablet_fu
       #    end
       #
-      # If you don't want mobile_fu to set the request format automatically,
+      # If you don't want mobile_and_tablet_fu to set the request format automatically,
       # you can pass false here.
       #
       #    class ApplicationController < ActionController::Base
-      #      has_mobile_fu false
+      #      has_mobile_and_tablet_fu false
       #    end
       #
-      def has_mobile_fu(set_request_format = true)
-        include ActionController::MobileFu::InstanceMethods
+      def has_mobile_and_tablet_fu(set_request_format = true)
+        include ActionController::MobileAndTabletFu::InstanceMethods
 
         before_filter :set_request_format if set_request_format
 
@@ -69,17 +69,17 @@ module ActionController
 
       # Add this to your controllers to prevent the mobile format from being set for specific actions
       #   class AwesomeController < ApplicationController
-      #     has_no_mobile_fu_for :index
-      #     
+      #     has_no_mobile_and_tablet_fu_for :index
+      #
       #     def index
       #       # Mobile format will not be set, even if user is on a mobile device
       #     end
-      #     
+      #
       #     def show
       #       # Mobile format will be set as normal here if user is on a mobile device
       #     end
       #   end
-      def has_no_mobile_fu_for(*actions)
+      def has_no_mobile_and_tablet_fu_for(*actions)
         @mobile_exempt_actions = actions
       end
     end
@@ -144,7 +144,7 @@ module ActionController
       end
 
       def is_tablet_device?
-        request.user_agent.to_s.downcase =~ Regexp.new(ActionController::MobileFu::TABLET_USER_AGENTS)
+        request.user_agent.to_s.downcase =~ Regexp.new(ActionController::MobileAndTabletFu::TABLET_USER_AGENTS)
       end
 
       def mobile_device
@@ -159,7 +159,7 @@ module ActionController
       end
 
       # Returns true if current action isn't supposed to use mobile format
-      # See #has_no_mobile_fu_for
+      # See #has_no_mobile_and_tablet_fu_for
 
       def mobile_exempt?
         self.class.instance_variable_get("@mobile_exempt_actions").try(:include?, params[:action].to_sym)
@@ -169,7 +169,7 @@ module ActionController
 end
 
 if Rails::VERSION::MAJOR < 3
-  ActionController::Base.send :include, ActionController::MobileFu
-  ActionView::Base.send :include, MobileFu::Helper
+  ActionController::Base.send :include, ActionController::MobileAndTabletFu
+  ActionView::Base.send :include, MobileAndTabletFu::Helper
   ActionView::Base.send :alias_method_chain, :stylesheet_link_tag, :mobilization
 end
