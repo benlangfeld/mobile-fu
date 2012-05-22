@@ -140,7 +140,7 @@ module ActionController
       # the device making the request is matched to a device in our regex.
 
       def is_mobile_device?
-        !!mobile_device
+        !is_tablet_device? && !!mobile_device
       end
 
       def is_tablet_device?
