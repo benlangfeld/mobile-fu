@@ -25,6 +25,15 @@ set as :mobile format.  It is up to you to determine how you want to handle
 these requests.  It is also up to you to create the .mobile.erb versions of
 your views that are to be requested.
 
+If you do not want to set the format to :mobile or :tablet and only use the 
+helper functions, pass false as an argument.
+
+    class ApplicationController < ActionController::Base
+         has_mobile_fu(false)
+    end
+
+
+
 Mobile Fu automatically adds a new `:mobile` and `:tablet` to `text/html` mime type 
 alias for Rails apps. If you already have a custom `:mobile` alias registered in 
 `config/initializers/mime_types.rb`, you can remove that.
