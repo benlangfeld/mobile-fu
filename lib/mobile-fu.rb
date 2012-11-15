@@ -70,11 +70,11 @@ module ActionController
       # Add this to your controllers to prevent the mobile format from being set for specific actions
       #   class AwesomeController < ApplicationController
       #     has_no_mobile_fu_for :index
-      #     
+      #
       #     def index
       #       # Mobile format will not be set, even if user is on a mobile device
       #     end
-      #     
+      #
       #     def show
       #       # Mobile format will be set as normal here if user is on a mobile device
       #     end
@@ -139,12 +139,12 @@ module ActionController
       # Returns either true or false depending on whether or not the user agent of
       # the device making the request is matched to a device in our regex.
 
-      def is_mobile_device?
-        !is_tablet_device? && !!mobile_device
+      def is_tablet_device?
+        !!(request.user_agent.to_s.downcase =~ Regexp.new(ActionController::MobileFu::TABLET_USER_AGENTS))
       end
 
-      def is_tablet_device?
-        request.user_agent.to_s.downcase =~ Regexp.new(ActionController::MobileFu::TABLET_USER_AGENTS)
+      def is_mobile_device?
+        !is_tablet_device? && !!mobile_device
       end
 
       def mobile_device
