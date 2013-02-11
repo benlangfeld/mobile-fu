@@ -33,7 +33,7 @@ module ActionController
   module MobileFu
     # These are various strings that can be found in tablet devices.  Please feel free
     # to add on to this list.
-    TABLET_USER_AGENTS =  /ipad|android 3.0|xoom|sch-i800|playbook|tablet|kindle|honeycomb|nexus 7/.freeze
+    TABLET_USER_AGENTS =  /ipad|android 3.0|xoom|sch-i800|gt-p1000|playbook|tablet|kindle|honeycomb|nexus 7/.freeze
 
     def self.included(base)
       base.extend ClassMethods
