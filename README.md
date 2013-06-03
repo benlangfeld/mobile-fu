@@ -69,6 +69,21 @@ session[:tablet_view] # => Set to true if request format is :tablet and false
                            if set to :html
 ```
 
+If you want to use the default response templates, like index.html.erb, instead of the index.tablet.erb you can
+exclude the tablet rendering from beeing used:
+you can create a `before_filter` and put it before the has_mobile_fu call
+
+```ruby
+before_filter :force_tablet_html
+has_mobile_fu
+
+def force_tablet_html
+	session[:tablet_view] = false
+end
+```
+
+Same will work for mobile, just change the `tablet` values to `mobile`
+
 So, different devices need different styling.  Don't worry, we've got this
 baked in to Mobile Fu.
 
