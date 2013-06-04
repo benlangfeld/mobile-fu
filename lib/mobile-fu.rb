@@ -82,6 +82,23 @@ module ActionController
       def has_no_mobile_fu_for(*actions)
         @mobile_exempt_actions = actions
       end
+      
+      # Add this to your controllers to only let those actions use the mobile format
+      # this method has priority over the #has_no_mobile_fu_for
+      #   class AwesomeController < ApplicationController
+      #     has_mobile_fu_for :index
+      #
+      #     def index
+      #       # Mobile format will be set as normal here if user is on a mobile device
+      #     end
+      #
+      #     def show
+      #       # Mobile format will not be set, even if user is on a mobile device
+      #     end
+      #   end
+      def has_mobile_fu_for(*actions)
+        @mobile_include_actions = actions
+      end
     end
 
     module InstanceMethods
@@ -111,10 +128,10 @@ module ActionController
       # 'Tablet' view.
 
       def set_mobile_format
-        if request.format.html? && !mobile_exempt? && is_mobile_device? && !request.xhr?
+        if request.format.html? && !mobile_action? && is_mobile_device? && !request.xhr?
           request.format = :mobile unless session[:mobile_view] == false
           session[:mobile_view] = true if session[:mobile_view].nil?
-        elsif request.format.html? && !mobile_exempt? && is_tablet_device? && !request.xhr?
+        elsif request.format.html? && !mobile_action? && is_tablet_device? && !request.xhr?
           request.format = :tablet unless session[:tablet_view] == false
           session[:tablet_view] = true if session[:tablet_view].nil?
         end
@@ -156,6 +173,16 @@ module ActionController
 
       def is_device?(type)
         request.user_agent.to_s.downcase.include? type.to_s.downcase
+      end
+
+      # Returns true if current action is supposed to use mobile format
+      # See #has_mobile_fu_for
+      def mobile_action?
+        if self.class.instance_variable_get("@mobile_include_actions").nil? #Now we know we dont have any includes, maybe excludes?
+          return mobile_exempt?
+        else
+          self.class.instance_variable_get("@mobile_include_actions").try(:include?, params[:action].to_sym)
+        end
       end
 
       # Returns true if current action isn't supposed to use mobile format

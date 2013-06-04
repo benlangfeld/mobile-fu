@@ -36,6 +36,24 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+If you dont want to have all the methods respond to :mobile and :tablet, you can opt-in this actions
+using the following class method: `has_mobile_fu_for :action`
+Example:
+
+```ruby
+class YourAwesomeClass < ActionController::Base
+  has_mobile_fu
+  has_mobile_fu_for :index
+
+  def index
+    # Mobile format will be set as normal here if user is on a mobile device
+  end
+
+  def another_method
+    # Mobile format will not be set, even if user is on a mobile device
+  end
+```
+
 Mobile Fu automatically adds a new `:mobile` and `:tablet` to `text/html` mime type
 alias for Rails apps. If you already have a custom `:mobile` alias registered in
 `config/initializers/mime_types.rb`, you can remove that.
