@@ -128,10 +128,10 @@ module ActionController
       # 'Tablet' view.
 
       def set_mobile_format
-        if request.format.html? && !mobile_action? && is_mobile_device? && !request.xhr?
+        if request.format.html? && mobile_action? && is_mobile_device? && !request.xhr?
           request.format = :mobile unless session[:mobile_view] == false
           session[:mobile_view] = true if session[:mobile_view].nil?
-        elsif request.format.html? && !mobile_action? && is_tablet_device? && !request.xhr?
+        elsif request.format.html? && mobile_action? && is_tablet_device? && !request.xhr?
           request.format = :tablet unless session[:tablet_view] == false
           session[:tablet_view] = true if session[:tablet_view].nil?
         end
@@ -179,7 +179,7 @@ module ActionController
       # See #has_mobile_fu_for
       def mobile_action?
         if self.class.instance_variable_get("@mobile_include_actions").nil? #Now we know we dont have any includes, maybe excludes?
-          return mobile_exempt?
+          return !mobile_exempt?
         else
           self.class.instance_variable_get("@mobile_include_actions").try(:include?, params[:action].to_sym)
         end
