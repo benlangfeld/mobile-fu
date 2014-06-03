@@ -8,6 +8,7 @@ describe MobileFu::Tablet do
      'ipad', 
      'IPAD',
      'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; ARM; Trident/6.0; Touch)',
+     'Mozilla/5.0 (Linux; U; Android 4.2.2; ja-jp; F-02F Build/V19R63A)'
     ].each do |user_agent|
 
       describe "examples that are a tablet" do
