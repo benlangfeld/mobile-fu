@@ -26,7 +26,7 @@ describe "Changes to ActionController" do
       let(:controller_stubs) do
         {
           request: {
-            headers: {"X_MOBILE_DEVICE" => "blah" },
+            headers: { "X_MOBILE_DEVICE" => "blah" },
             format: mock_format
           }
         }
