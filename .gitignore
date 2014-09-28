@@ -4,3 +4,4 @@ Gemfile.lock
 pkg/*
 vendor/ruby
 *.DS_Store
+.idea/
