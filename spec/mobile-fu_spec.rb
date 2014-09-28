@@ -6,7 +6,6 @@ describe "Changes to ActionController" do
   let(:controller) { InstanceMethodDummy.new(controller_stubs) }
 
   describe "set_mobile_format" do
-
     describe "for an unknown format" do
       let(:controller_stubs) { { request: { format: "php" } } }
       it "should not raise an error" do
@@ -19,11 +18,11 @@ describe "Changes to ActionController" do
     end
 
     describe "for a known format (that responds to html?)" do
-      let(:mock_format) {
-        fmt = mock()
+      let(:mock_format) do
+        fmt = mock
         fmt.stubs(:html?).returns(true)
         fmt
-      }
+      end
       let(:controller_stubs) do
         {
           request: {
@@ -35,12 +34,10 @@ describe "Changes to ActionController" do
       it "should not raise an error" do
         controller.set_mobile_format
       end
-
       it "should maintain the right format" do
         controller.set_mobile_format
         controller.request.format.must_be_same_as :mobile
       end
-
     end
   end
 
@@ -61,7 +58,6 @@ describe "Changes to ActionController" do
 end
 
 class DummyRequest
-
   attr_accessor :user_agent
   attr_accessor :format
   attr_accessor :headers
@@ -78,7 +74,6 @@ class DummyRequest
 end
 
 class InstanceMethodDummy
-
   include ActionController::MobileFu::InstanceMethods
 
   attr_accessor :user_agent
@@ -97,7 +92,6 @@ class InstanceMethodDummy
   end
 
   def params
-   {action: "show"}.merge(@stubs[:params] || {})
+    { action: "show" }.merge(@stubs[:params] || {})
   end
-
 end
