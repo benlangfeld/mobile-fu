@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require_relative "spec_helper"
 
 describe "Changes to ActionController" do
 
@@ -8,7 +8,7 @@ describe "Changes to ActionController" do
   describe "set_mobile_format" do
 
     describe "for an unknown format" do
-      let(:controller_stubs) { { :request => { :format => 'php' } } }
+      let(:controller_stubs) { { request: { format: "php" } } }
       it "should not raise an error" do
         controller.set_mobile_format
       end
@@ -26,9 +26,9 @@ describe "Changes to ActionController" do
       }
       let(:controller_stubs) do
         {
-          :request => {
-            :headers => {'X_MOBILE_DEVICE' => 'blah' },
-            :format => mock_format
+          request: {
+            headers: {"X_MOBILE_DEVICE" => "blah" },
+            format: mock_format
           }
         }
       end
@@ -97,7 +97,7 @@ class InstanceMethodDummy
   end
 
   def params
-   {:action => 'show'}.merge(@stubs[:params] || {})
+   {action: "show"}.merge(@stubs[:params] || {})
   end
 
 end
