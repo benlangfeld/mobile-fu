@@ -135,7 +135,7 @@ module ActionController
         if request.format.html? && mobile_action? && is_mobile_device? && !request.xhr?
           request.format = :mobile unless session[:mobile_view] == false
           session[:mobile_view] = true if session[:mobile_view].nil?
-        elsif request.format.html? && mobile_action? && is_tablet_device? && !request.xhr?
+        elsif request.format && request.format.html? && mobile_action? && is_tablet_device? && !request.xhr?
           request.format = :tablet unless session[:tablet_view] == false
           session[:tablet_view] = true if session[:tablet_view].nil?
         end
